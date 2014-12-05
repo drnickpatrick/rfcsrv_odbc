@@ -1,0 +1,64 @@
+Rfcsrv_odbc is RFC server for external databases access from SAP system.
+
+It can be useful when you need to connect with external databases and 
+standard SAP solutions like DBConnect,  UDConnect or XI is inapplicable, 
+i.e. when SAP AS running on unix and you want to connect with MSSQL.
+
+It can work with any DB for which ODBC driver exist.
+
+----------------------------------------------------------------------------------------------
+Usage.
+
+1.Set up of rfcsrv_odbc.
+
+1.1 Download NWRFC. http://wiki.scn.sap.com/wiki/display/ABAPConn/Download+and+Installation+of+NW+RFC+SDK
+    If you want to use compiled version of rfcsrv_odbc.exe, pick Windows x86 version of NWRFC. 
+    Otherwise download version you need and see section Compling.
+
+1.2 Download Microsoft.VC80.CRT (http://support.microsoft.com/kb/973923) and install it on computer you want to run rfcsrv_odbc.exe. 
+
+1.4 Create some directory and put there run.bat rfcsrv_odbc.exe, sapnwrfc.ini and libsapucum.dll, sapnwrfc.dll from NWRFC SDK.
+
+2 Install ODBC driver for database you need to connect to and create ODBC DSN for this database.
+
+4. In transaction SM59 create RFC destination (TCP/IP) <your_rfc_destination_name>. 
+   Set Activation Type=Registered Server Program, Program ID=<your_program_id>
+
+5.Edit sapnwrfc.ini :
+
+DEST=DEST1 <-- this is the label for connection entry, pass it as first parameter when run rfcsrv_odbc.exe
+ASHOST=XX.XX.XX.XX <-- sap application server ip-address or host name
+CLIENT=100 <-- client number
+TRACE=1 <-- trace level
+USER=BATCH <-- user name for rfc server to connect with SAP AS
+PASSWD=****** <-- user's password
+LANG=EN
+SYSNR=00 <-- system number
+TPNAME=<your_program_id> <-- Program ID.
+
+6.Run rfcsrv_odbc.exe, specify only first parameter DEST1:
+  rfcsrv_odbc.exe DEST1
+  It pops up connection string build dialog. 
+  Choose your database DSN, user name, password, and other options, click OK. 
+  It prints out complete connection string. Copy it from console.
+
+7.Run rfcsrv_odbc.exe, specify  DEST1 as first parameter and connection string as second parameter.
+  rfcsrv_odbc.exe DEST1 “CONNSTR”
+  If everything fine, it prints out the following:
+
+Logging in... ...done
+Fetching metadata... ...done
+Logging out... ...done
+Registering Server... ...done
+Starting to listen...
+
+----------------------------------------------------------------------------------------------
+Compiling from source.
+
+1.You need MS VS or MS VS Express & Windows SDK.
+
+2.For compiling use mk_debug.bat or mk_release.bat
+
+3.See also sap notes:
+1056696 Compiling and Linking RFC Programs with the SAP NW RFC SDK
+1025361 Support and Availability of the SAP NetWeaver RFC Library

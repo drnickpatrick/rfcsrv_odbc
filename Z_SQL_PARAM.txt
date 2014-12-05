@@ -1,0 +1,4 @@
+NUM		INT1	3	0	param's number
+IOTYPE		CHAR	1	0	Input, Output, Both.
+DATATYPE		CHAR	4	0	CHAR INT4 FLTP DATS TIMS DTTM supported
+VALUE		STRING	0	0	value as string
